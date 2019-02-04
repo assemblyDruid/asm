@@ -9,14 +9,26 @@
         ;;      "()" is used to dereference memory
         ;;
 
-        .file	"simple.c"      ;
-	.text
-	.globl	function
-	.type	function, @function
+        ;; SOURCE:
+        ;; void function(int a, int b, int c)
+        ;; {
+        ;;     char buffer1[5];
+        ;;     char buffer2[10];
+        ;; }
+
+        ;; void main()
+        ;; {
+        ;;     function(1,2,3);
+        ;; }
+
+        .file	"simple.c"      ; Informs GAS that a new logical file with this name is being started.
+	.text                   ; Informs GAS which subsection to assemble the following statements to. Blank = 0.
+	.globl	function        ; .globl makes the value visible to ld
+	.type	function, @function ;
 function:
 .LFB0:                          ; "L" = "local", FB0 = "Function Begin 0'
-	.cfi_startproc
-	pushq	%rbp
+	.cfi_startproc          ; Stack unwinding/exception handling. To disable: -fno-asynchronous-unwind-tables
+	pushq	%rbp            ;
 	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp
