@@ -1,0 +1,23 @@
+-------------------------------------------------------------------------------
+ Legend: [ seen in assembler ] :: [ subsection to explain ] :: [ explanation ]
+-------------------------------------------------------------------------------
+
+.file "simple.c" :: .file ::
+    Informs GAS that a new logical file with this name is being started.
+
+.cfi_startproc :: .cfi_start_proc ::
+    Stack unwinding/exception handling. To disable: -fno-asynchronous-unwind-tables
+
+xorl %eax, %eax :: xorl %eax, %eax::
+    efficient way to assign 0 to eax.
+
+movq -8(%rbp), %rax :: -8(%rbp) ::
+    Dereference value at register rbp, then subtract 8
+
+call strcpy@PLT :: @PLT ::
+    "Procedure Linkage Table" Used in dynamic loading and linking. The function
+    being called may be mapped anywhere within a process' virtual memory. The
+    PLT adds a layer of obfuscation that keeps a process in the dark regarding
+    the location of particular functions, but allows all processes to call the
+    functions in question without having to track different locations for this
+    function for each process.
