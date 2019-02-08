@@ -1,4 +1,6 @@
 -------------------------------------------------------------------------------
+ ASSEMBLER NOTES
+-------------------------------------------------------------------------------
  Legend: [ seen in assembler ] :: [ subsection to explain ] :: [ explanation ]
 -------------------------------------------------------------------------------
 
@@ -16,8 +18,26 @@ movq -8(%rbp), %rax :: -8(%rbp) ::
 
 call strcpy@PLT :: @PLT ::
     "Procedure Linkage Table" Used in dynamic loading and linking. The function
-    being called may be mapped anywhere within a process' virtual memory. The
-    PLT adds a layer of obfuscation that keeps a process in the dark regarding
-    the location of particular functions, but allows all processes to call the
-    functions in question without having to track different locations for this
-    function for each process.
+    being called may be mapped anywhere within a process' virtual memory. When
+    shared libraries were first introduced, they lacked PLTs and had one static
+    location for shared functions. Now, the PLT in conjunction with the GOT, or
+    "Global Offset Table", map each memory independent process to the function
+    they are trying to call. The first call to PLT for a given function will run
+    some initialization code which determines the location of that function for
+    all subsequent calls, including calls from other processes. Thus, no process
+    can know the location of a particular shared function at runtime, but is still
+    able to call it.
+
+-------------------------------------------------------------------------------
+ GENERAL NOTES
+-------------------------------------------------------------------------------
+ Legend: [ context ] :: [ concept/keyword/acronym ] :: [ explanation ]
+-------------------------------------------------------------------------------
+PLT && GOT :: ALSR ::
+    Address Space Layout Randomization. Relies on randomizing the base address of
+    shared libraries. Ideas of the GOT (Global Offset Table), PLT (Procedure Linkage
+    Table), PIEs (Position Independent Executables) && PIC (Position Independent
+    Code) are all founded on ASLR.
+
+How is libc loaded at runtime? :: ELF ::
+    ELF = "Executable Linker Format"
